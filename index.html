@@ -1,404 +1,472 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Password Strength Meter</title>
-<style>
-:root {
-  color-scheme: dark;
-  --bg:#0d1117;
-  --panel:#161b22;
-  --border:#30363d;
-  --text:#e6edf3;
-  --muted:#8b949e;
-  --accent:#58a6ff;
-  --good:#3fb950;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  min-height:100vh;
-  display:grid;
-  place-items:center;
-  padding:24px;
-  background:var(--bg);
-  color:var(--text);
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-.container {
-  width:min(680px,100%);
-  min-width:0;
-}
-.card {
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:28px;
-}
-h1 { margin:0 0 8px; }
-.subtitle { margin:0 0 24px; color:var(--muted); }
-label { display:block; margin-bottom:8px; font-weight:600; }
-.password-row { display:flex; gap:8px; }
-input {
-  flex:1;
-  min-width:0;
-  padding:13px 14px;
-  border:1px solid var(--border);
-  border-radius:8px;
-  background:var(--bg);
-  color:var(--text);
-  font-size:1rem;
-  outline:none;
-}
-input:focus { border-color:var(--accent); }
-button {
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:10px 14px;
-  background:#21262d;
-  color:var(--text);
-  cursor:pointer;
-}
-button:hover { background:#30363d; }
-button:disabled { opacity:.6; cursor:wait; }
-.meter {
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:5px;
-  margin-top:18px;
-}
-.segment {
-  height:8px;
-  border-radius:99px;
-  background:#30363d;
-  transition:background .15s ease;
-}
-.strength {
-  margin-top:10px;
-  display:flex;
-  justify-content:space-between;
-}
-#strength-label { font-weight:700; }
-#score { color:var(--muted); }
-.section {
-  margin-top:22px;
-  padding:16px;
-  border:1px solid var(--border);
-  border-radius:10px;
-}
-.section h2 { margin:0 0 10px; font-size:1rem; }
-.section p { color:var(--muted); line-height:1.5; }
-.feedback { color:var(--text)!important; }
-.check-button {
-  width:100%;
-  margin-top:14px;
-  background:#238636;
-  border-color:#2ea043;
-  font-weight:600;
-}
-.check-button:hover { background:#2ea043; }
-.status { margin-top:12px; min-height:24px; }
-.privacy {
-  margin-top:20px;
-  padding:12px;
-  border-left:3px solid var(--accent);
-  background:rgba(88,166,255,.06);
-  color:var(--muted);
-  font-size:.88rem;
-  line-height:1.5;
-}
-footer {
-  margin-top:18px;
-  text-align:center;
-  color:var(--muted);
-  font-size:.8rem;
-}
-footer a { color:var(--accent); }
-.empty { color:var(--muted)!important; }
-</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Password Strength Meter</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #0d1117;
+            --panel: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --muted: #8b949e;
+            --accent: #58a6ff;
+            --good: #3fb950;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            background: var(--bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .container {
+            width: min(680px, 100%);
+            min-width: 0;
+        }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 28px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+        }
+
+        .subtitle {
+            margin: 0 0 24px;
+            color: var(--muted);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .password-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        input {
+            flex: 1;
+            min-width: 0;
+            padding: 13px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+        }
+
+        button {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            background: #21262d;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #30363d;
+        }
+
+        button:disabled {
+            opacity: .6;
+            cursor: wait;
+        }
+
+        .meter {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+            margin-top: 18px;
+        }
+
+        .segment {
+            height: 8px;
+            border-radius: 99px;
+            background: #30363d;
+            transition: background .15s ease;
+        }
+
+        .strength {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #strength-label {
+            font-weight: 700;
+        }
+
+        #score {
+            color: var(--muted);
+        }
+
+        .section {
+            margin-top: 22px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        .section h2 {
+            margin: 0 0 10px;
+            font-size: 1rem;
+        }
+
+        .section p {
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .feedback {
+            color: var(--text) !important;
+        }
+
+        .check-button {
+            width: 100%;
+            margin-top: 14px;
+            background: #238636;
+            border-color: #2ea043;
+            font-weight: 600;
+        }
+
+        .check-button:hover {
+            background: #2ea043;
+        }
+
+        .status {
+            margin-top: 12px;
+            min-height: 24px;
+        }
+
+        .privacy {
+            margin-top: 20px;
+            padding: 12px;
+            border-left: 3px solid var(--accent);
+            background: rgba(88, 166, 255, .06);
+            color: var(--muted);
+            font-size: .88rem;
+            line-height: 1.5;
+        }
+
+        footer {
+            margin-top: 18px;
+            text-align: center;
+            color: var(--muted);
+            font-size: .8rem;
+        }
+
+        footer a {
+            color: var(--accent);
+        }
+
+        .empty {
+            color: var(--muted) !important;
+        }
+    </style>
 </head>
 
 <body>
-<main class="container">
-<section class="card">
+    <main class="container">
+        <section class="card">
 
-<h1>Password Strength Meter</h1>
+            <h1>Password Strength Meter</h1>
 
-<p class="subtitle">
-Local strength estimation with an optional Have I Been Pwned check.
-</p>
+            <p class="subtitle">
+                Local strength estimation with an optional Have I Been Pwned check.
+            </p>
 
-<label for="password">Password</label>
+            <label for="password">Password</label>
 
-<div class="password-row">
-<input
-  id="password"
-  type="password"
-  autocomplete="new-password"
-  spellcheck="false"
-  placeholder="Enter a password..."
->
-<button id="toggle" type="button">Show</button>
-</div>
+            <div class="password-row">
+                <input id="password" type="password" autocomplete="new-password" spellcheck="false" placeholder="Enter a password...">
+                <button id="toggle" type="button">Show</button>
+            </div>
 
-<div class="meter" aria-label="Password strength">
-<div class="segment"></div>
-<div class="segment"></div>
-<div class="segment"></div>
-<div class="segment"></div>
-<div class="segment"></div>
-</div>
+            <div class="meter" aria-label="Password strength">
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+            </div>
 
-<div class="strength">
-<span id="strength-label">Enter a password</span>
-<span id="score">—</span>
-</div>
+            <div class="strength">
+                <span id="strength-label">Enter a password</span>
+                <span id="score">—</span>
+            </div>
 
-<div class="section">
-<h2>Analysis</h2>
-<p id="feedback" class="empty">
-Your password will be analyzed locally using zxcvbn-ts.
-</p>
-<p id="crack-time"></p>
-</div>
+            <div class="section">
+                <h2>Analysis</h2>
+                <p id="feedback" class="empty">
+                    Your password will be analyzed locally using zxcvbn-ts.
+                </p>
+                <p id="crack-time"></p>
+            </div>
 
-<div class="section">
-<h2>Have I Been Pwned</h2>
+            <div class="section">
+                <h2>Have I Been Pwned</h2>
 
-<p>
-Check whether this password appears in known breach data.
-The check uses the HIBP k-anonymity mechanism through the
-zxcvbn-ts Pwned Passwords matcher.
-</p>
+                <p>
+                    Check whether this password appears in known breach data.
+                    The check uses the HIBP k-anonymity mechanism through the
+                    zxcvbn-ts Pwned Passwords matcher.
+                </p>
 
-<button id="pwned-check" class="check-button" type="button">
-Check Password Against Breaches
-</button>
+                <button id="pwned-check" class="check-button" type="button">
+                    Check Password Against Breaches
+                </button>
 
-<div id="pwned-status" class="status"></div>
-</div>
+                <div id="pwned-status" class="status"></div>
+            </div>
 
-<div class="privacy">
-<strong>Privacy:</strong>
-Password strength analysis happens entirely in your browser.
-The optional breach check uses HIBP's k-anonymity mechanism,
-so the complete password is never sent to HIBP.
-The breach check only happens when you press the button.
-</div>
+            <div class="privacy">
+                <strong>Privacy:</strong>
+                Password strength analysis happens entirely in your browser.
+                The optional breach check uses HIBP's k-anonymity mechanism,
+                so the complete password is never sent to HIBP.
+                The breach check only happens when you press the button.
+            </div>
 
-<footer>
-Powered by
-<a href="https://zxcvbn-ts.github.io/zxcvbn/" target="_blank" rel="noopener">zxcvbn-ts</a>
-and
-<a href="https://haveibeenpwned.com/" target="_blank" rel="noopener">Have I Been Pwned</a>
-</footer>
+            <footer>
+                Powered by
+                <a href="https://zxcvbn-ts.github.io/zxcvbn/" target="_blank" rel="noopener">zxcvbn-ts</a>
+                and
+                <a href="https://haveibeenpwned.com/" target="_blank" rel="noopener">Have I Been Pwned</a>
+            </footer>
 
-</section>
-</main>
+        </section>
+    </main>
 
-<script type="module">
-import { ZxcvbnFactory } from
-"https://cdn.jsdelivr.net/npm/@zxcvbn-ts/core@4.2.0/+esm";
+    <script type="module">
+        import {
+            ZxcvbnFactory
+        } from "https://cdn.jsdelivr.net/npm/@zxcvbn-ts/core@4.2.0/+esm";
 
-import * as common from
-"https://cdn.jsdelivr.net/npm/@zxcvbn-ts/language-common@4.1.3/+esm";
+        import * as common from "https://cdn.jsdelivr.net/npm/@zxcvbn-ts/language-common@4.1.3/+esm";
 
-import * as english from
-"https://cdn.jsdelivr.net/npm/@zxcvbn-ts/language-en@4.1.1/+esm";
+        import * as english from "https://cdn.jsdelivr.net/npm/@zxcvbn-ts/language-en@4.1.1/+esm";
 
-import { matcherPwnedFactory } from
-"https://cdn.jsdelivr.net/npm/@zxcvbn-ts/matcher-pwned@4.1.3/+esm";
+        import {
+            matcherPwnedFactory
+        } from "https://cdn.jsdelivr.net/npm/@zxcvbn-ts/matcher-pwned@4.1.3/+esm";
 
-const passwordInput = document.getElementById("password");
-const toggleButton = document.getElementById("toggle");
-const segments = [...document.querySelectorAll(".segment")];
-const strengthLabel = document.getElementById("strength-label");
-const scoreLabel = document.getElementById("score");
-const feedback = document.getElementById("feedback");
-const crackTime = document.getElementById("crack-time");
-const pwnedButton = document.getElementById("pwned-check");
-const pwnedStatus = document.getElementById("pwned-status");
+        const passwordInput = document.getElementById("password");
+        const toggleButton = document.getElementById("toggle");
+        const segments = [...document.querySelectorAll(".segment")];
+        const strengthLabel = document.getElementById("strength-label");
+        const scoreLabel = document.getElementById("score");
+        const feedback = document.getElementById("feedback");
+        const crackTime = document.getElementById("crack-time");
+        const pwnedButton = document.getElementById("pwned-check");
+        const pwnedStatus = document.getElementById("pwned-status");
 
-const options = {
-  translations: english.translations,
-  graphs: common.adjacencyGraphs,
-  dictionary: {
-    ...common.dictionary,
-    ...english.dictionary
-  },
-  useLevenshteinDistance: true
-};
+        const options = {
+            translations: english.translations,
+            graphs: common.adjacencyGraphs,
+            dictionary: {
+                ...common.dictionary,
+                ...english.dictionary
+            },
+            useLevenshteinDistance: true
+        };
 
-/*
- * Separate synchronous checker for the live meter.
- */
-const strengthChecker = new ZxcvbnFactory(options);
+        /*
+         * Separate synchronous checker for the live meter.
+         */
+        const strengthChecker = new ZxcvbnFactory(options);
 
-/*
- * Separate asynchronous checker containing the HIBP matcher.
- */
-const matcherPwned = matcherPwnedFactory(fetch);
+        /*
+         * Separate asynchronous checker containing the HIBP matcher.
+         */
+        const matcherPwned = matcherPwnedFactory(fetch);
 
-const pwnedChecker = new ZxcvbnFactory(
-  options,
-  { pwned: matcherPwned }
-);
+        const pwnedChecker = new ZxcvbnFactory(
+            options, {
+                pwned: matcherPwned
+            }
+        );
 
-const strengthNames = [
-  "Very weak",
-  "Weak",
-  "Fair",
-  "Strong",
-  "Very strong"
-];
+        const strengthNames = [
+            "Very weak",
+            "Weak",
+            "Fair",
+            "Strong",
+            "Very strong"
+        ];
 
-function updateMeter(score) {
-  segments.forEach((segment,index) => {
-    segment.style.background =
-      index <= score ? "var(--good)" : "#30363d";
-  });
-}
+        function updateMeter(score) {
+            segments.forEach((segment, index) => {
+                segment.style.background =
+                    index <= score ? "var(--good)" : "#30363d";
+            });
+        }
 
-function formatGuesses(guesses) {
-  if (guesses < 1000)
-    return Math.round(guesses).toLocaleString();
+        function formatGuesses(guesses) {
+            if (guesses < 1000)
+                return Math.round(guesses).toLocaleString();
 
-  if (guesses < 1000000)
-    return `${(guesses / 1000).toFixed(1)} thousand`;
+            if (guesses < 1000000)
+                return `${(guesses / 1000).toFixed(1)} thousand`;
 
-  if (guesses < 1000000000)
-    return `${(guesses / 1000000).toFixed(1)} million`;
+            if (guesses < 1000000000)
+                return `${(guesses / 1000000).toFixed(1)} million`;
 
-  if (guesses < 1000000000000)
-    return `${(guesses / 1000000000).toFixed(1)} billion`;
+            if (guesses < 1000000000000)
+                return `${(guesses / 1000000000).toFixed(1)} billion`;
 
-  return `${(guesses / 1000000000000).toFixed(1)} trillion`;
-}
+            return `${(guesses / 1000000000000).toFixed(1)} trillion`;
+        }
 
-function updateStrength(result) {
-  const score = result.score;
+        function updateStrength(result) {
+            const score = result.score;
 
-  strengthLabel.textContent =
-    strengthNames[score] ?? "Unknown";
+            strengthLabel.textContent =
+                strengthNames[score] ?? "Unknown";
 
-  scoreLabel.textContent =
-    `Score: ${score}/4`;
+            scoreLabel.textContent =
+                `Score: ${score}/4`;
 
-  updateMeter(score);
+            updateMeter(score);
 
-  const messages = [];
+            const messages = [];
 
-  if (result.feedback?.warning)
-    messages.push(result.feedback.warning);
+            if (result.feedback?.warning)
+                messages.push(result.feedback.warning);
 
-  if (result.feedback?.suggestions?.length)
-    messages.push(...result.feedback.suggestions);
+            if (result.feedback?.suggestions?.length)
+                messages.push(...result.feedback.suggestions);
 
-  feedback.textContent = messages.length
-    ? messages.join(" ")
-    : "No specific weaknesses were identified.";
+            feedback.textContent = messages.length ?
+                messages.join(" ") :
+                "No specific weaknesses were identified.";
 
-  feedback.classList.remove("empty");
+            feedback.classList.remove("empty");
 
-  crackTime.textContent =
-    `Estimated guesses to crack: ${formatGuesses(result.guesses)}`;
-}
+            crackTime.textContent =
+                `Estimated guesses to crack: ${formatGuesses(result.guesses)}`;
+        }
 
-function clearStrength() {
-  segments.forEach(segment => {
-    segment.style.background = "#30363d";
-  });
+        function clearStrength() {
+            segments.forEach(segment => {
+                segment.style.background = "#30363d";
+            });
 
-  strengthLabel.textContent = "Enter a password";
-  scoreLabel.textContent = "—";
+            strengthLabel.textContent = "Enter a password";
+            scoreLabel.textContent = "—";
 
-  feedback.textContent =
-    "Your password will be analyzed locally using zxcvbn-ts.";
+            feedback.textContent =
+                "Your password will be analyzed locally using zxcvbn-ts.";
 
-  feedback.classList.add("empty");
-  crackTime.textContent = "";
-}
+            feedback.classList.add("empty");
+            crackTime.textContent = "";
+        }
 
-passwordInput.addEventListener("input", () => {
-  const password = passwordInput.value;
+        passwordInput.addEventListener("input", () => {
+            const password = passwordInput.value;
 
-  pwnedStatus.textContent = "";
+            pwnedStatus.textContent = "";
 
-  if (!password) {
-    clearStrength();
-    return;
-  }
+            if (!password) {
+                clearStrength();
+                return;
+            }
 
-  /*
-   * Local synchronous strength calculation.
-   */
-  const result = strengthChecker.check(password);
+            /*
+             * Local synchronous strength calculation.
+             */
+            const result = strengthChecker.check(password);
 
-  updateStrength(result);
-});
+            updateStrength(result);
+        });
 
-toggleButton.addEventListener("click", () => {
-  const showing = passwordInput.type === "text";
+        toggleButton.addEventListener("click", () => {
+            const showing = passwordInput.type === "text";
 
-  passwordInput.type =
-    showing ? "password" : "text";
+            passwordInput.type =
+                showing ? "password" : "text";
 
-  toggleButton.textContent =
-    showing ? "Show" : "Hide";
-});
+            toggleButton.textContent =
+                showing ? "Show" : "Hide";
+        });
 
-pwnedButton.addEventListener("click", async () => {
-  const password = passwordInput.value;
+        pwnedButton.addEventListener("click", async () => {
+            const password = passwordInput.value;
 
-  if (!password) {
-    pwnedStatus.textContent =
-      "Enter a password first.";
-    return;
-  }
+            if (!password) {
+                pwnedStatus.textContent =
+                    "Enter a password first.";
+                return;
+            }
 
-  pwnedButton.disabled = true;
-  pwnedButton.textContent = "Checking...";
-  pwnedStatus.textContent =
-    "Checking HIBP Pwned Passwords...";
+            pwnedButton.disabled = true;
+            pwnedButton.textContent = "Checking...";
+            pwnedStatus.textContent =
+                "Checking HIBP Pwned Passwords...";
 
-  try {
-    const result =
-      await pwnedChecker.checkAsync(password);
+            try {
+                const result =
+                    await pwnedChecker.checkAsync(password);
 
-    const pwnedMatch =
-      result.sequence.find(
-        match => match.pattern === "pwned"
-      );
+                const pwnedMatch =
+                    result.sequence.find(
+                        match => match.pattern === "pwned"
+                    );
 
-    if (pwnedMatch) {
-      const count =
-        pwnedMatch.count ??
-        pwnedMatch.frequency ??
-        null;
+                if (pwnedMatch) {
+                    const count =
+                        pwnedMatch.count ??
+                        pwnedMatch.frequency ??
+                        null;
 
-      pwnedStatus.textContent = count
-        ? `⚠️ This password has appeared in known breaches ${Number(count).toLocaleString()} times.`
-        : "⚠️ This password appears in known breach data.";
-    } else {
-      pwnedStatus.textContent =
-        "✓ This password was not found in the HIBP Pwned Passwords database.";
-    }
+                    pwnedStatus.textContent = count ?
+                        `⚠️ This password has appeared in known breaches ${Number(count).toLocaleString()} times.` :
+                        "⚠️ This password appears in known breach data.";
+                } else {
+                    pwnedStatus.textContent =
+                        "✓ This password was not found in the HIBP Pwned Passwords database.";
+                }
 
-  } catch (error) {
-    console.error("HIBP check failed:", error);
+            } catch (error) {
+                console.error("HIBP check failed:", error);
 
-    pwnedStatus.textContent =
-      "The breach check could not be completed.";
-  }
+                pwnedStatus.textContent =
+                    "The breach check could not be completed.";
+            }
 
-  pwnedButton.disabled = false;
-  pwnedButton.textContent =
-    "Check Password Against Breaches";
-});
+            pwnedButton.disabled = false;
+            pwnedButton.textContent =
+                "Check Password Against Breaches";
+        });
 
-clearStrength();
-</script>
+        clearStrength();
+    </script>
 
 </body>
+
 </html>
